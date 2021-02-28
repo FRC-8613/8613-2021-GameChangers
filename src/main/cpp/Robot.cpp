@@ -7,7 +7,7 @@
 // Robot Logic (runs when robot is on regardless of below functions)
 void Robot::RobotInit() {
 	// init controllers and motors in here
-	leftF = new rev::CANSparkMax(4, rev::CANSparkMax::MotorType::kBrushed);
+	leftF = new rev::CANSparkMax(4, rev::CANSparkMax::MotorType::kBrushed); // cannot set ID of motors to 0 else motor will not function
 	leftB = new rev::CANSparkMax(1, rev::CANSparkMax::MotorType::kBrushed);
 	rightF = new rev::CANSparkMax(2, rev::CANSparkMax::MotorType::kBrushed);
 	rightB = new rev::CANSparkMax(3, rev::CANSparkMax::MotorType::kBrushed);
@@ -17,6 +17,8 @@ void Robot::RobotInit() {
 
 	// Initialise Joystick
 	j = new frc::Joystick(0);
+	// Setup default drive mode
+	mode = tank_drive_mode;
 
 
 }
@@ -38,39 +40,40 @@ void Robot::TeleopInit() {
 	// Might want to zero encoders or something when you start teleop
 }
 void Robot::TeleopPeriodic() {
-	// Get new speeds
-	joystick_lspeed = j->GetRawAxis(1);//*j->GetRawAxis(1)*j->GetRawAxis(1);
-	joystick_rspeed = -j->GetRawAxis(5);//*j->GetRawAxis(5)*j->GetRawAxis(5);
+	if (mode == tank_drive_mode) {
+		// Get new speeds
+		joystick_lspeed = j->GetRawAxis(1);//*j->GetRawAxis(1)*j->GetRawAxis(1);
+		joystick_rspeed = -j->GetRawAxis(5);//*j->GetRawAxis(5)*j->GetRawAxis(5);
 
-	//D Pad controls
-	curr_time = std::chrono::system_clock::now();
-	std::chrono::duration<double> duration_elapsed = curr_time - prev_time;
-	double time_dif = fmin(duration_elapsed.count(),0.1);
-	int dpad_direction = j->GetPOV(0);
-	if (dpad_direction == 90 || dpad_direction == 270) {
-		prev_time = curr_time;
-	}
-	if (time_dif < 0.001) { // value may have to be fine tuned as to ensure it only changes gear once per dpad press.
-		if (dpad_direction == 90) {
-			gear += gear_increment;
+		//D Pad controls
+		curr_time = std::chrono::system_clock::now();
+		std::chrono::duration<double> duration_elapsed = curr_time - prev_time;
+		double time_dif = fmin(duration_elapsed.count(),deadband_threshold);
+		int dpad_direction = j->GetPOV(0);
+		if (dpad_direction == dpad_right || dpad_direction == dpad_left) {
+			prev_time = curr_time;
 		}
-		else if (dpad_direction == 270) {
-			gear -= gear_increment;
+		if (time_dif < 0.001) { // value may have to be fine tuned as to ensure it only changes gear once per dpad press.
+			if (dpad_direction == dpad_right) {
+				gear += gear_increment;
+			}
+			else if (dpad_direction == dpad_left) {
+				gear -= gear_increment;
+			}
 		}
-	}
-	// Restrict gear values
-	if (gear < 0) {
-		gear = 0;
-	}
-	if (gear > 1) {
-		gear = 1;
-	}
+		// Restrict gear values
+		if (gear < 0) {
+			gear = 0;
+		}
+		if (gear > 1) {
+			gear = 1;
+		}
 
-	// Calculate motor speeds with gears
-	motor_lspeed = gear*joystick_lspeed;
-	motor_rspeed = gear*joystick_rspeed;
+		// Calculate motor speeds with gears
+		motor_lspeed = gear*joystick_lspeed;
+		motor_rspeed = gear*joystick_rspeed;
 
-	
+	}
 	// Set motors to be correct speeds
 	leftF->Set(motor_lspeed);
 	leftB->Set(motor_lspeed);
