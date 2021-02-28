@@ -41,6 +41,8 @@ private:
 	float motor_lspeed = 0; // default starting motor speed
 	float motor_rspeed = 0;
 	int mode = 0; // 0=tankdrive, 1=arcade drive
+	float gear_increment = 0.125; // increments of gear multiplier
+	float gear = 0.5; // default gear setting
 
 
 };

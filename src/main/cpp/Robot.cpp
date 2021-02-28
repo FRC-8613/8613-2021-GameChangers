@@ -18,6 +18,7 @@ void Robot::RobotInit() {
 	// Initialise Joystick
 	j = new frc::Joystick(0);
 
+
 }
 
 void Robot::RobotPeriodic() {
@@ -36,6 +37,67 @@ void Robot::AutonomousPeriodic() {}
 void Robot::TeleopInit() {
 	// Might want to zero encoders or something when you start teleop
 }
+void Robot::TeleopPeriodic() {
+	// Get new speeds
+	joystick_lspeed = j->GetRawAxis(1);//*j->GetRawAxis(1)*j->GetRawAxis(1);
+	joystick_rspeed = -j->GetRawAxis(5);//*j->GetRawAxis(5)*j->GetRawAxis(5);
+
+	//D Pad controls
+	curr_time = std::chrono::system_clock::now();
+	std::chrono::duration<double> duration_elapsed = curr_time - prev_time;
+	double time_dif = fmin(duration_elapsed.count(),0.1);
+	int dpad_direction = j->GetPOV(0);
+	if (dpad_direction == 90 || dpad_direction == 270) {
+		prev_time = curr_time;
+	}
+	if (time_dif < 0.001) { // value may have to be fine tuned as to ensure it only changes gear once per dpad press.
+		if (dpad_direction == 90) {
+			gear += gear_increment;
+		}
+		else if (dpad_direction == 270) {
+			gear -= gear_increment;
+		}
+	}
+	// Restrict gear values
+	if (gear < 0) {
+		gear = 0;
+	}
+	if (gear > 1) {
+		gear = 1;
+	}
+
+	// Calculate motor speeds with gears
+	motor_lspeed = gear*joystick_lspeed;
+	motor_rspeed = gear*joystick_rspeed;
+
+	
+	// Set motors to be correct speeds
+	leftF->Set(motor_lspeed);
+	leftB->Set(motor_lspeed);
+	rightF->Set(motor_rspeed);
+	rightB->Set(motor_rspeed);
+
+
+}
+
+// Test Logic 
+void Robot::TestInit() {}
+void Robot::TestPeriodic() {}
+
+
+
+
+/**
+ * Don't touch these lines
+ */
+#ifndef RUNNING_FRC_TESTS
+int main() {
+  return frc::StartRobot<Robot>();
+}
+#endif
+
+
+/* Acceleration Capping code
 void Robot::TeleopPeriodic() {
 	// Get new speeds
 	joystick_lspeed = j->GetRawAxis(1);//*j->GetRawAxis(1)*j->GetRawAxis(1);
@@ -75,10 +137,6 @@ void Robot::TeleopPeriodic() {
 		}
 	}
 
-	motor_lspeed = gear*joystick_lspeed;
-	motor_rspeed = gear*joystick_rspeed;
-
-	
 
 	leftF->Set(motor_lspeed);
 	leftB->Set(motor_lspeed);
@@ -90,19 +148,4 @@ void Robot::TeleopPeriodic() {
 	//std::cout << "Time Diff: " << time_dif << std::endl;
 	//std::cout << std::endl;
 }
-
-// Test Logic 
-void Robot::TestInit() {}
-void Robot::TestPeriodic() {}
-
-
-
-
-/**
- * Don't touch these lines
- */
-#ifndef RUNNING_FRC_TESTS
-int main() {
-  return frc::StartRobot<Robot>();
-}
-#endif
+*/
