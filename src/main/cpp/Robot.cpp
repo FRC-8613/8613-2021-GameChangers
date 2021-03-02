@@ -43,20 +43,22 @@ void Robot::TeleopPeriodic() {
 	// TODO: IMPLEMENT MODE CHANGNG CONTROLS (Pressing start and back simultaneously)
 	if (mode == tank_drive_mode) {
 		// Get new speeds
-		float joystick_lspeed = j->GetRawAxis(left_stick_y);//*j->GetRawAxis(1)*j->GetRawAxis(1);
-		float joystick_rspeed = -j->GetRawAxis(right_stick_y);//*j->GetRawAxis(5)*j->GetRawAxis(5);
+		float ly = j->GetRawAxis(left_stick_y);//*j->GetRawAxis(1)*j->GetRawAxis(1);
+		float ry = -j->GetRawAxis(right_stick_y);//*j->GetRawAxis(5)*j->GetRawAxis(5);
 
 		// Calculate motor speeds with gears
-		motor_lspeed = joystick_lspeed;
-		motor_rspeed = joystick_rspeed;
+		motor_lspeed = ly;
+		motor_rspeed = ry;
 
 	}
 	else if (mode == arcade_drive_mode) {
-		float l_x = j->GetRawAxis(left_stick_x);
-		float l_y = j->GetRawAxis(left_stick_y);
-		float r_x = j->GetRawAxis(right_stick_x);
-		float r_y = j->GetRawAxis(right_stick_y);
+		float lx = j->GetRawAxis(left_stick_x);
+		float ly = j->GetRawAxis(left_stick_y);
+		float rx = j->GetRawAxis(right_stick_x);
+		float ry = j->GetRawAxis(right_stick_y);
 		// TODO: IMPLEMENT ARCADE DRIVE 
+		motor_lspeed = ly/2+lx/2;
+		motor_rspeed = ly/2-lx/2;
 		// TODO: IMPLEMENT JOYSTICK PREFERENCE BASED ON START/BACK BUTTONS
 	}
 	else {
