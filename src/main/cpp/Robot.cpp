@@ -87,6 +87,22 @@ void Robot::TeleopPeriodic() {
 	if (gear > 1) {
 		gear = 1;
 	}
+
+	// cap motor speed
+	if (motor_lspeed > 1) {
+		motor_lspeed = 1;
+	}
+	if (motor_lspeed < 0) {
+		motor_lspeed = 0;
+	}
+	if (motor_rspeed > 1) {
+		motor_rspeed = 1;
+	}
+	if (motor_rspeed < 0) {
+		motor_rspeed = 0;
+	}
+	
+
 	// Set motors to be correct speeds
 	leftF->Set(motor_lspeed*gear);
 	leftB->Set(motor_lspeed*gear);
