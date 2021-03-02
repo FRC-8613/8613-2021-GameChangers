@@ -32,8 +32,7 @@ private:
 	rev::CANSparkMax *rightF;
 	rev::CANSparkMax *rightB;
 	frc::Joystick *j;
-	float joystick_lspeed;
-	float joystick_rspeed;
+
 	std::chrono::time_point<std::chrono::system_clock> curr_time;
 	std::chrono::time_point<std::chrono::system_clock> prev_time;
 	float lacceleration = 1; // acceleration in time it takes to get to max speed

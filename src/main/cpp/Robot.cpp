@@ -40,45 +40,56 @@ void Robot::TeleopInit() {
 	// Might want to zero encoders or something when you start teleop
 }
 void Robot::TeleopPeriodic() {
+	// TODO: IMPLEMENT MODE CHANGNG CONTROLS (Pressing start and back simultaneously)
 	if (mode == tank_drive_mode) {
 		// Get new speeds
-		joystick_lspeed = j->GetRawAxis(1);//*j->GetRawAxis(1)*j->GetRawAxis(1);
-		joystick_rspeed = -j->GetRawAxis(5);//*j->GetRawAxis(5)*j->GetRawAxis(5);
-
-		//D Pad controls
-		curr_time = std::chrono::system_clock::now();
-		std::chrono::duration<double> duration_elapsed = curr_time - prev_time;
-		double time_dif = fmin(duration_elapsed.count(),deadband_threshold);
-		int dpad_direction = j->GetPOV(0);
-		if (dpad_direction == dpad_right || dpad_direction == dpad_left) {
-			prev_time = curr_time;
-		}
-		if (time_dif < 0.001) { // value may have to be fine tuned as to ensure it only changes gear once per dpad press.
-			if (dpad_direction == dpad_right) {
-				gear += gear_increment;
-			}
-			else if (dpad_direction == dpad_left) {
-				gear -= gear_increment;
-			}
-		}
-		// Restrict gear values
-		if (gear < 0) {
-			gear = 0;
-		}
-		if (gear > 1) {
-			gear = 1;
-		}
+		float joystick_lspeed = j->GetRawAxis(left_stick_y);//*j->GetRawAxis(1)*j->GetRawAxis(1);
+		float joystick_rspeed = -j->GetRawAxis(right_stick_y);//*j->GetRawAxis(5)*j->GetRawAxis(5);
 
 		// Calculate motor speeds with gears
-		motor_lspeed = gear*joystick_lspeed;
-		motor_rspeed = gear*joystick_rspeed;
+		motor_lspeed = joystick_lspeed;
+		motor_rspeed = joystick_rspeed;
 
 	}
+	else if (mode == arcade_drive_mode) {
+		float l_x = j->GetRawAxis(left_stick_x);
+		float l_y = j->GetRawAxis(left_stick_y);
+		float r_x = j->GetRawAxis(right_stick_x);
+		float r_y = j->GetRawAxis(right_stick_y);
+		// TODO: IMPLEMENT ARCADE DRIVE 
+		// TODO: IMPLEMENT JOYSTICK PREFERENCE BASED ON START/BACK BUTTONS
+	}
+	else {
+		mode = tank_drive_mode; // First drive mode
+	}
+	//D Pad controls for virtual gearbox
+	curr_time = std::chrono::system_clock::now();
+	std::chrono::duration<double> duration_elapsed = curr_time - prev_time;
+	double time_dif = fmin(duration_elapsed.count(),deadband_threshold);
+	int dpad_direction = j->GetPOV(0);
+	if (dpad_direction == dpad_right || dpad_direction == dpad_left) {
+		prev_time = curr_time;
+	}
+	if (time_dif < 0.01) { // value may have to be fine tuned as to ensure it only changes gear once per dpad press.
+		if (dpad_direction == dpad_right) {
+			gear += gear_increment;
+		}
+		else if (dpad_direction == dpad_left) {
+			gear -= gear_increment;
+		}
+	}
+	// Restrict gear values
+	if (gear < 0) {
+		gear = 0;
+	}
+	if (gear > 1) {
+		gear = 1;
+	}
 	// Set motors to be correct speeds
-	leftF->Set(motor_lspeed);
-	leftB->Set(motor_lspeed);
-	rightF->Set(motor_rspeed);
-	rightB->Set(motor_rspeed);
+	leftF->Set(motor_lspeed*gear);
+	leftB->Set(motor_lspeed*gear);
+	rightF->Set(motor_rspeed*gear);
+	rightB->Set(motor_rspeed*gear);
 
 
 }
