@@ -4,6 +4,10 @@
 #include <unistd.h>
 #include <chrono>
 
+float clamp(float x, float l = -1.0f, float u = 1.0f) {
+	return (x<u) ? ((x>l) ? (x) : (l)) : (u);
+}
+
 // Robot Logic (runs when robot is on regardless of below functions)
 void Robot::RobotInit() {
 	// init controllers and motors in here
@@ -12,13 +16,13 @@ void Robot::RobotInit() {
 	rightF = new rev::CANSparkMax(2, rev::CANSparkMax::MotorType::kBrushed);
 	rightB = new rev::CANSparkMax(3, rev::CANSparkMax::MotorType::kBrushed);
 	
-	prev_time = std::chrono::system_clock::now();
+	t_last_dpad_press = std::chrono::system_clock::now();
 	
 
 	// Initialise Joystick
 	j = new frc::Joystick(0);
 	// Setup default drive mode
-	mode = tank_drive_mode;
+	mode = arcade_drive_mode;
 
 
 }
@@ -41,6 +45,7 @@ void Robot::TeleopInit() {
 }
 void Robot::TeleopPeriodic() {
 	// TODO: IMPLEMENT MODE CHANGNG CONTROLS (Pressing start and back simultaneously)
+	
 	if (mode == tank_drive_mode) {
 		// Get new speeds
 		float ly = j->GetRawAxis(left_stick_y);//*j->GetRawAxis(1)*j->GetRawAxis(1);
@@ -55,59 +60,48 @@ void Robot::TeleopPeriodic() {
 		float lx = j->GetRawAxis(left_stick_x);
 		float ly = j->GetRawAxis(left_stick_y);
 		float rx = j->GetRawAxis(right_stick_x);
-		float ry = j->GetRawAxis(right_stick_y);
-		// TODO: IMPLEMENT ARCADE DRIVE 
-		motor_lspeed = ly/2+lx/2;
-		motor_rspeed = ly/2-lx/2;
+		float ry = j->GetRawAxis(right_stick_y); 
+		motor_lspeed = ly-lx*(1-gear/2);
+		motor_rspeed = -ly-lx*(1-gear/2);
 		// TODO: IMPLEMENT JOYSTICK PREFERENCE BASED ON START/BACK BUTTONS
 	}
 	else {
 		mode = tank_drive_mode; // First drive mode
 	}
+
+
+
 	//D Pad controls for virtual gearbox
-	curr_time = std::chrono::system_clock::now();
-	std::chrono::duration<double> duration_elapsed = curr_time - prev_time;
-	double time_dif = fmin(duration_elapsed.count(),deadband_threshold);
+	t_now = std::chrono::system_clock::now();
+	std::chrono::duration<double> duration_elapsed = t_now - t_last_dpad_press;
+	double time_dif = duration_elapsed.count();
 	int dpad_direction = j->GetPOV(0);
-	if (dpad_direction == dpad_right || dpad_direction == dpad_left) {
-		prev_time = curr_time;
+
+	if (dpad_direction != dpad_right && dpad_direction != dpad_left) {
+		t_last_dpad_press = t_now;
+		shifted = false;
 	}
-	if (time_dif < 0.01) { // value may have to be fine tuned as to ensure it only changes gear once per dpad press.
+	if (time_dif > 0.1 && !shifted) { // value may have to be fine tuned as to ensure it only changes gear once per dpad press.
 		if (dpad_direction == dpad_right) {
 			gear += gear_increment;
 		}
 		else if (dpad_direction == dpad_left) {
 			gear -= gear_increment;
 		}
+		shifted = true;
 	}
 	// Restrict gear values
-	if (gear < 0) {
-		gear = 0;
-	}
-	if (gear > 1) {
-		gear = 1;
-	}
+	gear = clamp(gear, 0, 1);
 
 	// cap motor speed
-	if (motor_lspeed > 1) {
-		motor_lspeed = 1;
-	}
-	if (motor_lspeed < 0) {
-		motor_lspeed = 0;
-	}
-	if (motor_rspeed > 1) {
-		motor_rspeed = 1;
-	}
-	if (motor_rspeed < 0) {
-		motor_rspeed = 0;
-	}
-	
+	motor_lspeed = clamp(motor_lspeed)*gear;
+	motor_rspeed = clamp(motor_rspeed)*gear;
 
 	// Set motors to be correct speeds
-	leftF->Set(motor_lspeed*gear);
-	leftB->Set(motor_lspeed*gear);
-	rightF->Set(motor_rspeed*gear);
-	rightB->Set(motor_rspeed*gear);
+	leftF->Set(motor_lspeed);
+	leftB->Set(motor_lspeed);
+	rightF->Set(motor_rspeed);
+	rightB->Set(motor_rspeed);
 
 
 }

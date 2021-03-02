@@ -33,8 +33,8 @@ private:
 	rev::CANSparkMax *rightB;
 	frc::Joystick *j;
 
-	std::chrono::time_point<std::chrono::system_clock> curr_time;
-	std::chrono::time_point<std::chrono::system_clock> prev_time;
+	std::chrono::time_point<std::chrono::system_clock> t_now;
+	std::chrono::time_point<std::chrono::system_clock> t_last_dpad_press;
 	float lacceleration = 1; // acceleration in time it takes to get to max speed
 	float racceleration = 1;
 	float motor_lspeed = 0; // default starting motor speed
@@ -67,6 +67,8 @@ private:
 	int start = 8; // also right arrow
 	int left_stick = 9;
 	int right_stick = 10;
+
+	bool shifted = false;
 
 
 };
