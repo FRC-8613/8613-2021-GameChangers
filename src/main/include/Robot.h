@@ -38,10 +38,12 @@ private:
 	rev::CANSparkMax *rightB;
 	frc::Joystick *j;
 
-	std::chrono::time_point<std::chrono::system_clock> t1_now;
-	std::chrono::time_point<std::chrono::system_clock> t1_last_press;
-	std::chrono::time_point<std::chrono::system_clock> t2_now;
-	std::chrono::time_point<std::chrono::system_clock> t2_last_press;
+	std::chrono::time_point<std::chrono::system_clock> t_gear_now;
+	std::chrono::time_point<std::chrono::system_clock> t_gear_last_press;
+	std::chrono::time_point<std::chrono::system_clock> t_mode_now;
+	std::chrono::time_point<std::chrono::system_clock> t_mode_last_press;
+	std::chrono::time_point<std::chrono::system_clock> t_pref_now;
+	std::chrono::time_point<std::chrono::system_clock> t_pref_last_press;
 	float lacceleration = 1; // acceleration in time it takes to get to max speed
 	float racceleration = 1;
 	float motor_lspeed = 0; // default starting motor speed
@@ -76,8 +78,13 @@ private:
 	int left_stick = 9;
 	int right_stick = 10;
 
-	bool shifted = false;
-	bool shifted2 = false;
+	bool gear_shifted = false;
+	bool mode_shifted = false;
+	bool pref_shifted = false;
+
+	int pref;
+	int left_pref = 0;
+	int right_pref = 1;
 
 
 };
