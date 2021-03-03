@@ -5,6 +5,11 @@
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
 #include <rev/CANSparkMax.h>
+#include <unistd.h>
+#include <chrono>
+#include <math.h>
+#include <iostream>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 
 class Robot : public frc::TimedRobot {

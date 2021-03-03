@@ -1,8 +1,4 @@
 #include "Robot.h"
-#include <iostream>
-#include <frc/smartdashboard/SmartDashboard.h>
-#include <unistd.h>
-#include <chrono>
 
 float clamp(float x, float l = -1.0f, float u = 1.0f) {
 	return (x<u) ? ((x>l) ? (x) : (l)) : (u);
@@ -61,9 +57,11 @@ void Robot::TeleopPeriodic() {
 		float ly = j->GetRawAxis(left_stick_y);
 		float rx = j->GetRawAxis(right_stick_x);
 		float ry = j->GetRawAxis(right_stick_y); 
-		motor_lspeed = ly-lx*(1-gear/2);
-		motor_rspeed = -ly-lx*(1-gear/2);
-		// TODO: IMPLEMENT JOYSTICK PREFERENCE BASED ON START/BACK BUTTONS
+		float theta = atan2(ly,lx);
+		float radius = pow(lx*lx+ly*ly,0.5);
+		motor_lspeed = radius*cos(theta-M_PI/4);
+		motor_rspeed = radius*sin(theta-M_PI/4);
+		// TODO: IMPLEMENT JOYSTICK PREFERENCE BASED ON JOYSTICK BUTTONS
 	}
 	else {
 		mode = tank_drive_mode; // First drive mode
