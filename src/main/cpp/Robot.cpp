@@ -58,20 +58,21 @@ void Robot::TeleopPeriodic() {
 		// Joystick switching preference
 		// Mode switching
 		t_pref_now = std::chrono::system_clock::now();
-		bool is_pref_switch = j->GetRawButton(7);
+		bool is_pref_switch_l = j->GetRawButton(left_stick);
+		bool is_pref_switch_r = j->GetRawButton(right_stick);
 		
-		if (!is_pref_switch) {
+		if (!is_pref_switch_l && !is_pref_switch_r) {
 			t_pref_last_press = t_pref_now;
 			pref_shifted = false;
 		}
 		std::chrono::duration<double> duration_elapsed_pref = t_pref_now - t_pref_last_press;
 		double time_dif2 = duration_elapsed_pref.count();
 		if (time_dif2 > press_delay && !pref_shifted) { 
-			if (pref == left_pref) {
+			if (pref == left_pref && is_pref_switch_r) {
 				pref = right_pref;
 				std::cout << "PREF: Right" << std::endl;
 			}
-			else if (pref == right_pref) {
+			else if (pref == right_pref && is_pref_switch_l) {
 				pref = left_pref;
 				std::cout << "PREF: LEFT" << std::endl;
 			}
@@ -85,10 +86,25 @@ void Robot::TeleopPeriodic() {
 		float ly = j->GetRawAxis(left_stick_y);
 		float rx = j->GetRawAxis(right_stick_x);
 		float ry = j->GetRawAxis(right_stick_y); 
-		float theta = atan2(ly,-lx);
-		float radius = pow(lx*lx+ly*ly,0.5);
-		motor_lspeed = radius*cos(theta-M_PI/4);
-		motor_rspeed = -radius*sin(theta-M_PI/4);
+		float x = 0;
+		float y = 0;
+		if (pref == left_pref) {
+			x = lx;
+			y = ly;
+			float theta = atan2(y,-x);
+			float radius = pow(x*x+y*y,0.5);
+			motor_lspeed = radius*cos(theta-M_PI/4);
+			motor_rspeed = -radius*sin(theta-M_PI/4);
+		}
+		if (pref == right_pref) {
+			x = rx;
+			y = ry;
+			float theta = atan2(y,-x);
+			float radius = pow(x*x+y*y,0.5);
+			motor_lspeed = radius*cos(theta-M_PI/4);
+			motor_rspeed = -radius*sin(theta-M_PI/4);
+		}
+
 		
 	}
 	else {
