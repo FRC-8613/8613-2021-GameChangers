@@ -58,10 +58,10 @@ void Robot::TeleopPeriodic() {
 		float ly = j->GetRawAxis(left_stick_y);
 		float rx = j->GetRawAxis(right_stick_x);
 		float ry = j->GetRawAxis(right_stick_y); 
-		float theta = atan2(ly,lx);
+		float theta = atan2(ly,-lx);
 		float radius = pow(lx*lx+ly*ly,0.5);
 		motor_lspeed = radius*cos(theta-M_PI/4);
-		motor_rspeed = radius*sin(theta-M_PI/4);
+		motor_rspeed = -radius*sin(theta-M_PI/4);
 		// TODO: IMPLEMENT JOYSTICK PREFERENCE BASED ON JOYSTICK BUTTONS
 	}
 	else {
