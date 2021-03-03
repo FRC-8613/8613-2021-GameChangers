@@ -38,8 +38,10 @@ private:
 	rev::CANSparkMax *rightB;
 	frc::Joystick *j;
 
-	std::chrono::time_point<std::chrono::system_clock> t_now;
-	std::chrono::time_point<std::chrono::system_clock> t_last_dpad_press;
+	std::chrono::time_point<std::chrono::system_clock> t1_now;
+	std::chrono::time_point<std::chrono::system_clock> t1_last_press;
+	std::chrono::time_point<std::chrono::system_clock> t2_now;
+	std::chrono::time_point<std::chrono::system_clock> t2_last_press;
 	float lacceleration = 1; // acceleration in time it takes to get to max speed
 	float racceleration = 1;
 	float motor_lspeed = 0; // default starting motor speed
@@ -54,6 +56,7 @@ private:
 	int dpad_down = 180;
 	int dpad_left = 270; 
 	float deadband_threshold = 0.1; // Threshold where motors are set to 0 e.g. 0.1 -> between -0.1 and 0.1 motors set to 0.
+	float press_delay = 0.05; // time of button press before code responds
 
 	int left_stick_x = 0;
 	int left_stick_y = 1;

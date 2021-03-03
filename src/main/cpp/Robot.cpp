@@ -12,7 +12,8 @@ void Robot::RobotInit() {
 	rightF = new rev::CANSparkMax(2, rev::CANSparkMax::MotorType::kBrushed);
 	rightB = new rev::CANSparkMax(3, rev::CANSparkMax::MotorType::kBrushed);
 	
-	t_last_dpad_press = std::chrono::system_clock::now();
+	t1_last_press = std::chrono::system_clock::now();
+	t2_last_press = std::chrono::system_clock::now();
 	
 
 	// Initialise Joystick
@@ -67,25 +68,46 @@ void Robot::TeleopPeriodic() {
 		mode = tank_drive_mode; // First drive mode
 	}
 
+	// Mode switching
+	t2_now = std::chrono::system_clock::now();
+	std::chrono::duration<double> duration_elapsed2 = t2_now - t2_last_press;
+	double time_dif2 = duration_elapsed2.count();
+	bool is_mode_switch = j->GetRawButton(7);
 
-
-	//D Pad controls for virtual gearbox
-	t_now = std::chrono::system_clock::now();
-	std::chrono::duration<double> duration_elapsed = t_now - t_last_dpad_press;
-	double time_dif = duration_elapsed.count();
+	if (!is_mode_switch) {
+		t1_last_press = t1_now;
+		shifted = false;
+	}
+	if (time_dif2 > press_delay && !shifted) { 
+		if (mode == tank_drive_mode) {
+			mode = arcade_drive_mode;
+			std::cout << "MODE: Arcade" << std::endl;
+		}
+		else if (mode == arcade_drive_mode) {
+			mode = tank_drive_mode;
+			std::cout << "MODE: Tank" << std::endl;
+		}
+		
+		shifted = true;
+	}
+	// D Pad controls for virtual gearbox
+	t1_now = std::chrono::system_clock::now();
+	std::chrono::duration<double> duration_elapsed1 = t1_now - t1_last_press;
+	double time_dif1 = duration_elapsed1.count();
 	int dpad_direction = j->GetPOV(0);
 
 	if (dpad_direction != dpad_right && dpad_direction != dpad_left) {
-		t_last_dpad_press = t_now;
+		t1_last_press = t1_now;
 		shifted = false;
 	}
-	if (time_dif > 0.1 && !shifted) { // value may have to be fine tuned as to ensure it only changes gear once per dpad press.
+	if (time_dif1 > press_delay && !shifted) { // value may have to be fine tuned as to ensure it only changes gear once per dpad press.
 		if (dpad_direction == dpad_right) {
 			gear += gear_increment;
 		}
 		else if (dpad_direction == dpad_left) {
 			gear -= gear_increment;
 		}
+		std::cout << "GEAR: " << gear << std::endl;
 		shifted = true;
 	}
 	// Restrict gear values
