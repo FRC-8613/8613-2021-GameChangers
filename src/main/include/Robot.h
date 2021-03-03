@@ -56,7 +56,7 @@ private:
 	int dpad_down = 180;
 	int dpad_left = 270; 
 	float deadband_threshold = 0.1; // Threshold where motors are set to 0 e.g. 0.1 -> between -0.1 and 0.1 motors set to 0.
-	float press_delay = 0.05; // time of button press before code responds
+	float press_delay = 0.01; // time of button press before code responds
 
 	int left_stick_x = 0;
 	int left_stick_y = 1;
@@ -77,6 +77,7 @@ private:
 	int right_stick = 10;
 
 	bool shifted = false;
+	bool shifted2 = false;
 
 
 };

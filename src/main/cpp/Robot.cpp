@@ -70,15 +70,15 @@ void Robot::TeleopPeriodic() {
 
 	// Mode switching
 	t2_now = std::chrono::system_clock::now();
+	bool is_mode_switch = j->GetRawButton(7);
+	
+	if (!is_mode_switch) {
+		t2_last_press = t2_now;
+		shifted2 = false;
+	}
 	std::chrono::duration<double> duration_elapsed2 = t2_now - t2_last_press;
 	double time_dif2 = duration_elapsed2.count();
-	bool is_mode_switch = j->GetRawButton(7);
-
-	if (!is_mode_switch) {
-		t1_last_press = t1_now;
-		shifted = false;
-	}
-	if (time_dif2 > press_delay && !shifted) { 
+	if (time_dif2 > press_delay && !shifted2) { 
 		if (mode == tank_drive_mode) {
 			mode = arcade_drive_mode;
 			std::cout << "MODE: Arcade" << std::endl;
@@ -88,30 +88,30 @@ void Robot::TeleopPeriodic() {
 			std::cout << "MODE: Tank" << std::endl;
 		}
 		
-		shifted = true;
+		shifted2 = true;
 	}
 	// D Pad controls for virtual gearbox
 	t1_now = std::chrono::system_clock::now();
-	std::chrono::duration<double> duration_elapsed1 = t1_now - t1_last_press;
-	double time_dif1 = duration_elapsed1.count();
 	int dpad_direction = j->GetPOV(0);
 
 	if (dpad_direction != dpad_right && dpad_direction != dpad_left) {
 		t1_last_press = t1_now;
 		shifted = false;
 	}
+	std::chrono::duration<double> duration_elapsed1 = t1_now - t1_last_press;
+	double time_dif1 = duration_elapsed1.count();
 	if (time_dif1 > press_delay && !shifted) { // value may have to be fine tuned as to ensure it only changes gear once per dpad press.
 		if (dpad_direction == dpad_right) {
 			gear += gear_increment;
 		}
-		else if (dpad_direction == dpad_left) {
+		if (dpad_direction == dpad_left) {
 			gear -= gear_increment;
 		}
+		// Restrict gear values
+		gear = clamp(gear, 0, 1);
 		std::cout << "GEAR: " << gear << std::endl;
 		shifted = true;
 	}
-	// Restrict gear values
-	gear = clamp(gear, 0, 1);
 
 	// cap motor speed
 	motor_lspeed = clamp(motor_lspeed)*gear;
