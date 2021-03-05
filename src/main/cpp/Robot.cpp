@@ -86,9 +86,18 @@ void Robot::TeleopPeriodic() {
 		float ly = j->GetRawAxis(left_stick_y);
 		float rx = j->GetRawAxis(right_stick_x);
 		float ry = j->GetRawAxis(right_stick_y); 
+
 		float x = 0;
 		float y = 0;
-		if (pref == left_pref) {
+		if (lx == 0 && ly == 0 && pref == left_pref) {
+			x = rx;
+			y = ry;
+			float theta = atan2(y,-x);
+			float radius = pow(x*x+y*y,0.5);
+			motor_lspeed = radius*cos(theta-M_PI/4);
+			motor_rspeed = -radius*sin(theta-M_PI/4);
+		}
+		else if (rx == 0 && ry == 0 && pref == right_pref) {
 			x = lx;
 			y = ly;
 			float theta = atan2(y,-x);
@@ -96,7 +105,15 @@ void Robot::TeleopPeriodic() {
 			motor_lspeed = radius*cos(theta-M_PI/4);
 			motor_rspeed = -radius*sin(theta-M_PI/4);
 		}
-		if (pref == right_pref) {
+		else if (pref == left_pref) {
+			x = lx;
+			y = ly;
+			float theta = atan2(y,-x);
+			float radius = pow(x*x+y*y,0.5);
+			motor_lspeed = radius*cos(theta-M_PI/4);
+			motor_rspeed = -radius*sin(theta-M_PI/4);
+		}
+		else if (pref == right_pref) {
 			x = rx;
 			y = ry;
 			float theta = atan2(y,-x);
@@ -185,56 +202,3 @@ int main() {
 }
 #endif
 
-
-/* Acceleration Capping code
-void Robot::TeleopPeriodic() {
-	// Get new speeds
-	joystick_lspeed = j->GetRawAxis(1);//*j->GetRawAxis(1)*j->GetRawAxis(1);
-	joystick_rspeed = -j->GetRawAxis(5);//*j->GetRawAxis(5)*j->GetRawAxis(5);
-
-	lacceleration = fabs(joystick_lspeed - motor_lspeed);
-	racceleration = fabs(joystick_rspeed - motor_rspeed);
-
-	curr_time = std::chrono::system_clock::now();
-	std::chrono::duration<double> duration_elapsed = curr_time - prev_time;
-	double time_dif = fmin(duration_elapsed.count(),0.1);
-	prev_time = curr_time;
-	// LEFT MOTOR
-	
-	if (fabs(joystick_lspeed) < 0.1 ) {
-		motor_lspeed = 0;
-	} 
-	else {
-		if (joystick_lspeed > motor_lspeed) {
-			motor_lspeed += lacceleration * time_dif;
-		}
-		else {
-			motor_lspeed -= lacceleration * time_dif;
-		}
-	}
-	// RIGHT MOTOR
-	
-	if (fabs(joystick_rspeed) < 0.1 ) {
-		motor_rspeed = 0;
-	} 
-	else {
-		if (joystick_rspeed > motor_rspeed) {
-			motor_rspeed += racceleration * time_dif;
-		}
-		else {
-			motor_rspeed -= racceleration * time_dif;
-		}
-	}
-
-
-	leftF->Set(motor_lspeed);
-	leftB->Set(motor_lspeed);
-	rightF->Set(motor_rspeed);
-	rightB->Set(motor_rspeed);
-
-	//std::cout << "Left Speed: " << motor_lspeed << std::endl;
-	//std::cout << "Right Speed: " << motor_rspeed << std::endl;
-	//std::cout << "Time Diff: " << time_dif << std::endl;
-	//std::cout << std::endl;
-}
-*/
