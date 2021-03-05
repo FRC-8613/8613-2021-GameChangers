@@ -89,7 +89,7 @@ void Robot::TeleopPeriodic() {
 
 		float x = 0;
 		float y = 0;
-		if (lx == 0 && ly == 0 && pref == left_pref) {
+		if (fabs(lx) < deadband_threshold && fabs(ly) < deadband_threshold && pref == left_pref) {
 			x = rx;
 			y = ry;
 			float theta = atan2(y,-x);
@@ -97,7 +97,7 @@ void Robot::TeleopPeriodic() {
 			motor_lspeed = radius*cos(theta-M_PI/4);
 			motor_rspeed = -radius*sin(theta-M_PI/4);
 		}
-		else if (rx == 0 && ry == 0 && pref == right_pref) {
+		else if (fabs(rx) < deadband_threshold && fabs(ry) < deadband_threshold && pref == right_pref) {
 			x = lx;
 			y = ly;
 			float theta = atan2(y,-x);
