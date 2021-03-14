@@ -121,12 +121,11 @@ void Robot::TeleopPeriodic() {
 			motor_lspeed = radius*cos(theta-M_PI/4);
 			motor_rspeed = -radius*sin(theta-M_PI/4);
 		}
-
 		
 	}
-	else {
+	else 
 		mode = tank_drive_mode; // First drive mode
-	}
+	
 
 	// Mode switching
 	t_mode_now = std::chrono::system_clock::now();
