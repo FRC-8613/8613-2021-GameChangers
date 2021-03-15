@@ -1,16 +1,15 @@
 #include "Robot.h"
 
-float clamp(float x, float l = -1.0f, float u = 1.0f) {
-	return (x<u) ? ((x>l) ? (x) : (l)) : (u);
-}
+
 
 // Robot Logic (runs when robot is on regardless of below functions)
 void Robot::RobotInit() {
 	// init controllers and motors in here
-	leftF = new rev::CANSparkMax(4, rev::CANSparkMax::MotorType::kBrushed); // cannot set ID of motors to 0 else motor will not function
-	leftB = new rev::CANSparkMax(1, rev::CANSparkMax::MotorType::kBrushed);
-	rightF = new rev::CANSparkMax(2, rev::CANSparkMax::MotorType::kBrushed);
-	rightB = new rev::CANSparkMax(3, rev::CANSparkMax::MotorType::kBrushed);
+	DriveTrain* mydrivetrain = new DriveTrain();
+	mydrivetrain->AddMotor(4, rev::CANSparkMax::MotorType::kBrushed, 0); // cannot set ID of motors to 0 else motor will not function
+	mydrivetrain->AddMotor(1, rev::CANSparkMax::MotorType::kBrushed, 0);
+	mydrivetrain->AddMotor(2, rev::CANSparkMax::MotorType::kBrushed, 1);
+	mydrivetrain->AddMotor(3, rev::CANSparkMax::MotorType::kBrushed, 1);
 	
 	t_gear_last_press = std::chrono::system_clock::now();
 	t_mode_last_press = std::chrono::system_clock::now();

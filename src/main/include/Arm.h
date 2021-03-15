@@ -1,19 +1,22 @@
+/*
 #ifndef Arm_8613
 #define Arm_8613
 
-extern class Motor;
-extern class LimitSwitch;
+#include <rev/CANSparkMax.h>
+
+
+typedef Motor rev::CANSparkMax;
 
 
 class Arm
 {
 public:
-    Arm(Motor *mot, LimitSwitch *LStop, LimitSwitch *LSbottom);
+    Arm(Motor *motor);
     ~Arm();
 protected:
 private:
-    LimitSwitch *top, *bottom;
     Motor *motor;
 };
 
 #endif
+*/

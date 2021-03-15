@@ -1,15 +1,18 @@
-#pragma once
+#ifndef Robot_8613
+#define Robot_8613
 
-#include <string>
 #include "frc/Joystick.h"
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
 #include <rev/CANSparkMax.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <unistd.h>
 #include <chrono>
 #include <math.h>
 #include <iostream>
-#include <frc/smartdashboard/SmartDashboard.h>
+#include <string>
+
+
 
 
 class Robot : public frc::TimedRobot {
@@ -88,3 +91,7 @@ private:
 
 
 };
+
+
+
+#endif
