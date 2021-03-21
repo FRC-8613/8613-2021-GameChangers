@@ -1,4 +1,4 @@
-/*
+
 #ifndef Intake_8613
 #define Intake_8613
 
@@ -14,10 +14,13 @@ class Intake
 public:
     Intake(Motor *motor);
     ~Intake();
+
+    void Spin(float spd) {
+        motor->Set(spd);
+    }
 protected:
 private:
     Motor *motor;
 };
 
 #endif
-*/
