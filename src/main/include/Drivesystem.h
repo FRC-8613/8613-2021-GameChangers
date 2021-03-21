@@ -12,4 +12,3 @@ class Drivesystem {
 	Drivetrain &_drivetrain;
 	double _leftPower, _rightPower;
 };
-© 2021 GitHub, Inc.

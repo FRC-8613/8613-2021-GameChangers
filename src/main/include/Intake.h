@@ -5,7 +5,6 @@
 
 #include <rev/CANSparkMax.h>
 
-
 typedef Motor rev::CANSparkMax;
 
 
