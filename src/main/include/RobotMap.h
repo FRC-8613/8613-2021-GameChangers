@@ -11,6 +11,7 @@
 #include <math.h>
 #include <iostream>
 #include <string>
+#include <vector>
 #include <frc/Timer.h>
 #include <frc/ADXL345_SPI.h>
 #include <frc/AnalogGyro.h>

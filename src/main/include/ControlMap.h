@@ -8,7 +8,7 @@ struct ControlMap {
 	 */
 	static const int Xbox1Port = 0, Xbox2Port = 1;
 	static constexpr frc::Joystick *j = new frc::JoyStick(0);
-	
+
 	/**
 	 * Drivetrain
 	 */
@@ -27,13 +27,13 @@ struct ControlMap {
 	float motor_lspeed = 0; // default starting motor speed
 	float motor_rspeed = 0;
 	int mode; // mode value for driving type
-	enum DriveMode { tank_drive_mode = 0, 
+	enum DriveMode { tank_drive_mode = 0,
 					 arcade_drive_mode };
 	static constexpr float gear_increment = 0.125; // increments of gear multiplier
 	float gear = 0.5;
-	enum DpadDirection { dpad_up = 0, 
-		   				 dpad_right = 90, 
-		   				 dpad_down = 180, 
+	enum DpadDirection { dpad_up = 0,
+		   				 dpad_right = 90,
+		   				 dpad_down = 180,
 		   				 dpad_left = 270 }; 
 	static constexpr float deadband_threshold = 0.1; // Threshold where motors are set to 0 e.g. 0.1 -> between -0.1 and 0.1 motors set to 0.
 	static constexpr float press_delay = 0.01; // time of button press before code responds

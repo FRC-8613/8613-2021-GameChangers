@@ -1,13 +1,12 @@
 #include "Drivesystem.h"
-#include "ControlMap.h"
-#include <vector>
+
 
 std::vector<jEvent> eventlist;
 
 class jEvent {
 	jEvent(enum jEventType t, void* d) {
 		switch (t) {
-			case btn: 
+			case btn:
 				btn_state = *((bool*)d);
 				break;
 			case axis:
@@ -28,20 +27,29 @@ class joystick_snapshot {
 		joystick_snapshot(frc::Joystick* j) : m_j(j) {}
 		~joystick_snapshot() {}
 		void Update() {
+			// Update Buttons
 			for(int i = 1; i < ControlMap::NUM_BUTTONS) {
-				bool tmp = m_j->GetRawButton(i);
-				if(tmp != btns[i-1]) 
-					eventlist.push_back(jEvent(jEvent::btn, tmp));
-				btns[i-1] = tmp;
+				bool btnTmp = m_j->GetRawButton(i);
+				if(btnTmp != btns[i-1])
+					eventlist.push_back(jEvent(jEvent::btn, btnTmp));
+				btns[i-1] = btTmp;
 			}
-			
+			// Update Axis
 			for(int i = 0; i < ControlMap::NUM_AXIS) {
-				bool tmp = m_j->GetRawAxis(i);
-				change_axis[i] = (tmp == axis[i]);
-				axis[i] = tmp;
+				float axisTmp = m_j->GetRawAxis(i);
+				if (tmp != axis[i]) {
+					change_axis[i] = true;
+					eventlist.push_back(jEvent(jEvent::axis, axisTmp));
+				}
+				axis[i] = axisTmp;
 			}
-
-			// dpad
+			// Update DPAD
+			int dpadTmp = j->GetPOV(0);
+			if (dpadTmp != dpad) {
+				change_dpad = true;
+				eventlist.push_back(jEvent(jEvent::dpad,dpadTmp))
+			}
+			dpad = dpadTmp;
 
 		}
 
@@ -67,16 +75,16 @@ Drivesystem::Drivesystem(Drivetrain &drivetrain) : _drivetrain(drivetrain) {
 	 */
 	_leftPower = 0;
 	_rightPower = 0;
-	
+
 }
 
 void Drivesystem::updatePeriodic(double dt) {
 	float lx = ControlMap::j->GetRawAxis(ControlMap::left_stick_x);
 	float ly = ControlMap::j->GetRawAxis(ControlMap::left_stick_y);
 	float rx = ControlMap::j->GetRawAxis(ControlMap::right_stick_x);
-	float ry = ControlMap::j->GetRawAxis(ControlMap::right_stick_y); 
-	_leftPower = clamp(ly);//*gear; 
-	_rightPower = clamp(ry);//*gear; 
+	float ry = ControlMap::j->GetRawAxis(ControlMap::right_stick_y);
+	_leftPower = clamp(ly);//*gear;
+	_rightPower = clamp(ry);//*gear;
 
 	_drivetrain.set(_leftPower, _rightPower); // Sets power to the drivetrain, but is only updated in robot periodic
 }
