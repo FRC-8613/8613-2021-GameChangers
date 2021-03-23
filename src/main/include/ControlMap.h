@@ -1,7 +1,7 @@
 #pragma once
 #include "frc/Joystick.h"
 
-struct ControlMap {
+struct ControlMap { // [TODO: Move non constant vars elsewhere]
 
 	/**
 	 * Controllers
@@ -34,7 +34,7 @@ struct ControlMap {
 	enum DpadDirection { dpad_up = 0,
 		   				 dpad_right = 90,
 		   				 dpad_down = 180,
-		   				 dpad_left = 270 }; 
+		   				 dpad_left = 270 };
 	static constexpr float deadband_threshold = 0.1; // Threshold where motors are set to 0 e.g. 0.1 -> between -0.1 and 0.1 motors set to 0.
 	static constexpr float press_delay = 0.01; // time of button press before code responds
 
