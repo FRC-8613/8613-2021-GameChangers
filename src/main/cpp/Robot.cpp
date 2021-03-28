@@ -37,11 +37,13 @@ void Robot::TeleopPeriodic() {
 	dt = currentTimeStamp - lastTimeStamp;
 
 	drivesystem->updatePeriodic(dt);
+	// Do Event Handling??
+
 
 	lastTimeStamp = currentTimeStamp;
 }
 
-// Test Logic 
+// Test Logic
 void Robot::TestInit() {}
 void Robot::TestPeriodic() {}
 
@@ -86,7 +88,7 @@ void Robot::TeleopPeriodic() {
 	float lx = j->GetRawAxis(left_stick_x);
 	float ly = j->GetRawAxis(left_stick_y);
 	float rx = j->GetRawAxis(right_stick_x);
-	float ry = j->GetRawAxis(right_stick_y); 
+	float ry = j->GetRawAxis(right_stick_y);
 	bool is_pref_switch_l = j->GetRawButton(left_stick);
 	bool is_pref_switch_r = j->GetRawButton(right_stick);
 	if (mode == tank_drive_mode) {
@@ -102,7 +104,7 @@ void Robot::TeleopPeriodic() {
 		}
 		std::chrono::duration<double> duration_elapsed_pref = t_pref_now - t_pref_last_press;
 		double time_dif2 = duration_elapsed_pref.count();
-		if (time_dif2 > press_delay && !pref_shifted) { 
+		if (time_dif2 > press_delay && !pref_shifted) {
 			if (pref == left_pref && is_pref_switch_r) {
 				pref = right_pref;
 				std::cout << "PREF: Right" << std::endl;
@@ -111,12 +113,12 @@ void Robot::TeleopPeriodic() {
 				pref = left_pref;
 				std::cout << "PREF: LEFT" << std::endl;
 			}
-			
+
 			pref_shifted = true;
 		}
 
 		DriveTrain::ArcadeDrive(int pref, float lx, float ly, float rx, float ry);
-		
+
 	}
 	else {
 		mode = tank_drive_mode; // First drive mode
@@ -125,14 +127,14 @@ void Robot::TeleopPeriodic() {
 	// Mode switching
 	t_mode_now = std::chrono::system_clock::now();
 	bool is_mode_switch = j->GetRawButton(7);
-	
+
 	if (!is_mode_switch) {
 		t_mode_last_press = t_mode_now;
 		mode_shifted = false;
 	}
 	std::chrono::duration<double> duration_elapsed_mode = t_mode_now - t_mode_last_press;
 	double time_dif2 = duration_elapsed_mode.count();
-	if (time_dif2 > press_delay && !mode_shifted) { 
+	if (time_dif2 > press_delay && !mode_shifted) {
 		if (mode == tank_drive_mode) {
 			mode = arcade_drive_mode;
 			std::cout << "MODE: Arcade" << std::endl;
@@ -141,7 +143,7 @@ void Robot::TeleopPeriodic() {
 			mode = tank_drive_mode;
 			std::cout << "MODE: Tank" << std::endl;
 		}
-		
+
 		mode_shifted = true;
 	}
 	// D Pad controls for virtual gearbox
@@ -166,9 +168,8 @@ void Robot::TeleopPeriodic() {
 
 }
 
-// Test Logic 
+// Test Logic
 void Robot::TestInit() {}
 void Robot::TestPeriodic() {}
 
 */
-
