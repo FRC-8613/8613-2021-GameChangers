@@ -1,6 +1,9 @@
+/*
+ * Accessed by Subsystems
+ */
+
 #pragma once
 
-// #include <frc/Joystick.h>
 #include <frc/XboxController.h>
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
@@ -15,6 +18,8 @@
 #include <frc/Timer.h>
 #include <frc/ADXL345_SPI.h>
 #include <frc/AnalogGyro.h>
+#include <frc/Joystick.h>
+#include <frc/DigitalInput.h>
 
 /**
  * Phoenix CTRE

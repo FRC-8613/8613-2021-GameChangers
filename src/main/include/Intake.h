@@ -1,9 +1,12 @@
+/**
+ * Subsystem. Accessed by Robot.cpp
+ */
 
 #ifndef Intake_8613
 #define Intake_8613
 
 
-#include <rev/CANSparkMax.h>
+#include "RobotMap.h"
 
 typedef Motor rev::CANSparkMax;
 

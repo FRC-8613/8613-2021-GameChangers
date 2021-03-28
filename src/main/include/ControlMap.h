@@ -1,5 +1,9 @@
+/*
+ * Accessed by RobotMap.h
+ */
+
+
 #pragma once
-#include "frc/Joystick.h"
 
 struct ControlMap { // [TODO: Move non constant vars elsewhere]
 

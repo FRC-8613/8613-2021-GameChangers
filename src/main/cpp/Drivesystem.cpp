@@ -1,6 +1,8 @@
+/*
+ * Subsystem. Accessed by Robot.cpp
+ */
+
 #include "Drivesystem.h"
-
-
 
 float clamp(float x, float l = -1.0f, float u = 1.0f) {
 	return (x<u) ? ((x>l) ? (x) : (l)) : (u);
