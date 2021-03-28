@@ -6,19 +6,20 @@ class jEvent {
 	jEvent(enum jEventType t, void* d) {}
 	enum jEventType {btn, dpad, axis} type;
 	bool btn_state;
-	int data = 0;
+	float data = 0;
 };
 
-class eventHandler { //[TODO]
-  eventHandler() {}
-  ~eventHandler() {}
-
+class EventHandler { //[TODO]
+  EventHandler() {}
+  ~EventHandler() {}
+private:
+  joystick_snapshot js;
 }
 
-class joystick_snapshot {
+class JoystickSnapshot {
 	public:
-		joystick_snapshot(frc::Joystick* j) : m_j(j) {}
-		~joystick_snapshot() {}
+		JoystickSnapshot(frc::Joystick* j) : m_j(j) {}
+		~JoystickSnapshot() {}
 
 
 	bool btns[] = {};
@@ -27,7 +28,7 @@ class joystick_snapshot {
 
 	bool change_btns[] = {};
 	bool change_dpad = false;
-	bool axis[] = {};
+	bool change_axis[] = {};
 
 	private:
 		frc::Joystick* m_j;

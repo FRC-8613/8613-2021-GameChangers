@@ -4,6 +4,7 @@ double currentTimeStamp, lastTimeStamp, dt;
 
 // Robot Logic (runs when robot is on regardless of below functions)
 void Robot::RobotInit() {
+	eventhandler = new EventHandler(robotMap.j);
 	drivetrain = new Drivetrain(robotMap.drivesystem.config); // Initialize a new drivetrain
 	drivetrain->getConfig().leftDrive.transmission->setInverted(true); // Invert one side
 	drivetrain->getConfig().rightDrive.transmission->setInverted(false);
@@ -37,7 +38,7 @@ void Robot::TeleopPeriodic() {
 	dt = currentTimeStamp - lastTimeStamp;
 
 	drivesystem->updatePeriodic(dt);
-	// Do Event Handling??
+	eventHandler->processEvents();
 
 
 	lastTimeStamp = currentTimeStamp;

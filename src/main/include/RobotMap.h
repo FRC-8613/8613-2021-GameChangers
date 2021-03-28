@@ -73,5 +73,6 @@ struct RobotMap {
 		DrivetrainConfig config{ LeftGB, RightGB, &gyro, 0.60, 1, 0.075, 55};
 		// Drivetrain drivetrain{config};
 
-	}; Drivesystem drivesystem;
+	};
+	Drivesystem drivesystem;
 };

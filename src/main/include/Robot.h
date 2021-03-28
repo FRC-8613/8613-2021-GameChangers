@@ -37,7 +37,7 @@ public:
 
 private:
 	RobotMap robotMap;
-
+  EventHandler* eventhandler;
 	Drivesystem *drivesystem; // Our drivesystem logic for telop and auto
 	Drivetrain *drivetrain; // Our generic drivetrain class
 };

@@ -1,7 +1,30 @@
 #include "Event.h"
+#include "Arm.h"
+#include "Intake.h"
+#include "Drivesystem.h"
 
-void eventHandler::processEvents() {
+void EventHandler::processEvents() {
+	js->update();
+	// Stuff
+	for(auto& event : eventlist) {
+		switch (event.type) {
+			case btn:
+				btnMap[event.btn].second();
+			break;
+			case axis:
 
+			break;
+			case dpad:
+
+			break:
+			default:
+				std::cerr << "EventHander: Unrecognised event type.\n";
+		}
+
+
+
+
+	}
 }
 
 jEvent::jEvent(enum jEventType t, void* d) {
@@ -18,13 +41,13 @@ jEvent::jEvent(enum jEventType t, void* d) {
 	}
 }
 
-void joystick_snapshot::Update() {
+void JoystickSnapshot::update() {
 	// Update Buttons
 	for(int i = 1; i < ControlMap::NUM_BUTTONS) {
 		bool btnTmp = m_j->GetRawButton(i);
 		if(btnTmp != btns[i-1])
 			eventlist.push_back(jEvent(jEvent::btn, btnTmp));
-		btns[i-1] = btTmp;
+		btns[i-1] = btnTmp;
 	}
 	// Update Axis
 	for(int i = 0; i < ControlMap::NUM_AXIS) {
