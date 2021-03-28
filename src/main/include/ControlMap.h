@@ -11,7 +11,7 @@ struct ControlMap { // [TODO: Move non constant vars elsewhere]
 	 * Controllers
 	 */
 	static const int Xbox1Port = 0, Xbox2Port = 1;
-	static constexpr frc::Joystick *j = new frc::JoyStick(0);
+
 
 	/**
 	 * Drivetrain
@@ -28,13 +28,9 @@ struct ControlMap { // [TODO: Move non constant vars elsewhere]
 	std::chrono::time_point<std::chrono::system_clock> t_pref_last_press;
 	static constexpr float lacceleration = 1; // acceleration in time it takes to get to max speed
 	static constexpr float racceleration = 1;
-	float motor_lspeed = 0; // default starting motor speed
-	float motor_rspeed = 0;
-	int mode; // mode value for driving type
 	enum DriveMode { tank_drive_mode = 0,
 					 arcade_drive_mode };
 	static constexpr float gear_increment = 0.125; // increments of gear multiplier
-	float gear = 0.5;
 	enum DpadDirection { dpad_up = 0,
 		   				 dpad_right = 90,
 		   				 dpad_down = 180,
@@ -64,11 +60,6 @@ struct ControlMap { // [TODO: Move non constant vars elsewhere]
 		right_stick,
 		NUM_BUTTONS };
 
-	bool gear_shifted = false;
-	bool mode_shifted = false;
-	bool pref_shifted = false;
-
-	int pref;
 	enum ArcadePreference {
 		left_pref = 0,
 		right_pref };

@@ -24,6 +24,9 @@ class eventHandler { //[TODO]
   eventHandler() {
 
   }
+	processEvents() {
+		
+	}
 }
 
 class joystick_snapshot {

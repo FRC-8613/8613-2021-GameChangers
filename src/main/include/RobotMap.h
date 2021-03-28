@@ -38,6 +38,7 @@
 
 struct RobotMap {
 	frc::XboxController xbox1{ ControlMap::Xbox1Port };
+	frc::Joystick *j = new frc::JoyStick(0);
 
 	struct Drivesystem {
 
