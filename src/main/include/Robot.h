@@ -14,6 +14,8 @@
  * Subsystems
  */
 #include "Drivesystem.h"
+#include "Arm.h"
+#include "Intake.h"
 
 class Robot : public frc::TimedRobot {
 public:
