@@ -5,7 +5,7 @@
 
 #pragma once
 
-struct ControlMap { // [TODO: Move non constant vars elsewhere]
+struct ControlMap {
 
 	/**
 	 * Controllers
