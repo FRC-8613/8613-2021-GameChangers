@@ -11,7 +11,7 @@
 typedef Motor rev::CANSparkMax;
 
 
-class Intake
+class Intake : public Subsystem
 {
 public:
     Intake(Motor *motor);

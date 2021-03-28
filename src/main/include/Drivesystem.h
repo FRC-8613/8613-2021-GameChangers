@@ -7,7 +7,8 @@
 #include "RobotMap.h"
 #include "libs/Drivetrain.h"
 
-class Drivesystem {
+class Drivesystem : public Subsystem
+{
  public:
 	Drivesystem(Drivetrain &drivetrain);
 	void updatePeriodic(double dt);

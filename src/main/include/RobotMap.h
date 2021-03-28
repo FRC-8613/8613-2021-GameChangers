@@ -35,6 +35,14 @@
 // Use sparkmax's
 #define SPARKMAX
 
+//subsystem base class
+typedef enum {ssDrive, ssIntake, ssArm, ssClimb} SubSystemType;
+class SubSystem {
+	SubSystem(std::string subsystem_name, SubSystemType type)
+	: name(subsystem_name), type(subsystem_type) {}
+	std::string name;
+	SubSystemType type;
+}
 
 struct RobotMap {
 	frc::XboxController xbox1{ ControlMap::Xbox1Port };

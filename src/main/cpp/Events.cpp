@@ -27,18 +27,9 @@ void EventHandler::processEvents() {
 	}
 }
 
-jEvent::jEvent(enum jEventType t, void* d) {
-	switch (t) {
-		case btn:
-			btn_state = *((bool*)d);
-			break;
-		case axis:
-			data = *((float*)d);
-			break;
-		case dpad:
-			data = *((int*)d);
-			break;
-	}
+jEvent::jEvent(enum jEventType t, float d) {
+	type = t;
+	data = d;
 }
 
 void JoystickSnapshot::update() {
@@ -46,7 +37,7 @@ void JoystickSnapshot::update() {
 	for(int i = 1; i < ControlMap::NUM_BUTTONS) {
 		bool btnTmp = m_j->GetRawButton(i);
 		if(btnTmp != btns[i-1])
-			eventlist.push_back(jEvent(jEvent::btn, btnTmp));
+			eventlist.push_back(jEvent(jEvent::btn, (float)btnTmp));
 		btns[i-1] = btnTmp;
 	}
 	// Update Axis
@@ -62,7 +53,7 @@ void JoystickSnapshot::update() {
 	int dpadTmp = j->GetPOV(0);
 	if (dpadTmp != dpad) {
 		change_dpad = true;
-		eventlist.push_back(jEvent(jEvent::dpad,dpadTmp))
+		eventlist.push_back(jEvent(jEvent::dpad, (float)dpadTmp))
 	}
 	dpad = dpadTmp;
 

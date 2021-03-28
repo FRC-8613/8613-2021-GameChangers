@@ -9,7 +9,7 @@
 
 typedef Motor rev::CANSparkMax;
 
-class Arm
+class Arm: public Subsystem
 {
 public:
     Arm(Motor *motor, DigitalInput *top, DigitalInput *btm, DigitalInput *toptop, DigitalInput *btmbtm)
@@ -29,7 +29,7 @@ public:
     void Move(float spd) {
         armstate = asMOVE; speed = spd;
     }
-
+/*
     void MoveToTop(float spd)  {
         armstate = asMOVETO; speed = spd;
     }
@@ -37,7 +37,7 @@ public:
     void MoveToBtm(float spd)  {
         armstate = asMOVETO; speed = spd;
     }
-
+*/
     void Update() {
         if( (top->Get() || toptop->Get()) && speed > 0 ||
             (btm->Get() || btmbtm->Get()) && speed < 0) {

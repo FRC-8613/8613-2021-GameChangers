@@ -1,6 +1,12 @@
 #include <vector>
+#include "Arm.h"
+#include "Intake.h"
+#include "Drivesystem.h"
 std::vector<jEvent> eventlist;
 
+//                 type,  ID, Event,            Mapped Function, Param
+typedef std::tuple< int, int,  Subsystem*, int, , std::function<void(float)>, float* > JoystickMap_Record
+std::vector<JoystickMap_Record> JoystickMap;
 
 class jEvent {
 	jEvent(enum jEventType t, void* d) {}
